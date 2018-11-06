@@ -10,7 +10,7 @@
       "id": 2,
       "name": "Buzz Lightyear",
       "image": "http://www.pngmart.com/files/6/Buzz-Lightyear-PNG-Transparent-Picture.png",
-      "likes": 8
+      "likes": 39
     },
     {
       "id": 3,
@@ -47,6 +47,54 @@
       "name": "Little Green Men",
       "image": "http://www.pngmart.com/files/3/Toy-Story-Alien-PNG-File.png",
       "likes": -2
+    },
+    {
+      "name": "Zurg",
+      "image": "https://images-na.ssl-images-amazon.com/images/I/81BT%2BAGCxKL._SY606_.jpg",
+      "likes": 0,
+      "id": 9
+    },
+    {
+      "name": "Stinky Pete",
+      "image": "https://vignette.wikia.nocookie.net/characters/images/7/79/Stinky_Pete.PNG/revision/latest?cb=20160717031747",
+      "likes": 0,
+      "id": 10
+    },
+    {
+      "name": "Sarge",
+      "image": "https://banner2.kisspng.com/20180402/yuq/kisspng-sergeant-buzz-lightyear-toy-story-army-men-story-5ac1f5dee12f88.8035243315226608309224.jpg",
+      "likes": 0,
+      "id": 11
+    },
+    {
+      "name": "Jessie",
+      "image": "https://upload.wikimedia.org/wikipedia/en/8/87/Jessie_%28Toy_Story%29.png",
+      "likes": 0,
+      "id": 12
+    },
+    {
+      "name": "Jessie",
+      "image": "https://upload.wikimedia.org/wikipedia/en/8/87/Jessie_%28Toy_Story%29.png",
+      "likes": 3,
+      "id": 13
+    },
+    {
+      "name": "Jessie",
+      "image": "https://upload.wikimedia.org/wikipedia/en/8/87/Jessie_%28Toy_Story%29.png",
+      "likes": 2,
+      "id": 14
+    },
+    {
+      "name": "Jessie",
+      "image": "https://upload.wikimedia.org/wikipedia/en/8/87/Jessie_%28Toy_Story%29.png",
+      "likes": 2,
+      "id": 15
+    },
+    {
+      "name": "Jessie",
+      "image": "https://upload.wikimedia.org/wikipedia/en/8/87/Jessie_%28Toy_Story%29.png",
+      "likes": 5,
+      "id": 16
     }
   ]
 }
