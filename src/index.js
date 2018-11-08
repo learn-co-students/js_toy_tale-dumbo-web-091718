@@ -1,63 +1,30 @@
+
 const addBtn = document.querySelector('#new-toy-btn')
 const toyForm = document.querySelector('.container')
+const toyCollection = document.getElementById('toy-collection')
+const url = "http://localhost:3000/toys"
 let addToy = false
 
 // YOUR CODE HERE
 
-// document.addEventListener('DomContentLoaded', () => {
+// display all toy cards
+fetch(url)
+  .then( response => response.json() )
+  .then( json => {
 
-  let toyContainer = document.getElementById('toy-collection')
-
-  fetch('http://localhost:3000/toys')
-  .then( (response) => {
-    return response.json()
+    json.forEach( toy => {
+      toyCollection.innerHTML += `<div class="card">
+      <h2>${toy.name}</h2>
+      <img src=${toy.image} class="toy-avatar" />
+      <p data-id="${toy.id}">${toy.likes} Likes </p>
+      <button class="like-btn">Like <3</button>
+      <button class="delete-btn">Delete</button>
+    </div>`
+    })
   })
-  .then( (json) => renderToyCollection(json) )
 
 
-  // render entire toy collection in database
-  function renderToyCollection(list) {
-
-    list.forEach( (toyObject) => {
-      toyContainer.innerHTML += `<div class="card">
-    <h2>${toyObject.name}</h2>
-    <img src=${toyObject.image} class="toy-avatar" />
-    <p>${toyObject.likes} Likes </p>
-    <button class="like-btn" id='${toyObject.id}'>Like <3</button>
-  </div>`
-    })
-
-  }
-
-  // POST method to add new toy
-  function renderNewToy(url) {
-
-    fetch(url, {
-      method: 'POST',
-      headers: {
-        "Content-Type": "application/json",
-        "Accept": "application/json"
-      },
-      body: JSON.stringify( {
-        "name": event.target[0].value,
-        "image": event.target[1].value,
-        "likes": 0
-      })
-    })
-    .then( (response) => {
-      return response.json()
-    })
-    .then( (json) => {
-      toyContainer.innerHTML += `<div class="card">
-    <h2>${json.name}</h2>
-    <img src=${json.image} class="toy-avatar" />
-    <p>${json.likes} Likes </p>
-    <button class="like-btn" id='${json.id}'>Like <3</button>
-  </div>`
-    })
-
-  }
-
+  // add a new toy
   addBtn.addEventListener('click', () => {
     // hide & seek with the form
     addToy = !addToy
@@ -68,59 +35,82 @@ let addToy = false
       toyForm.addEventListener('submit', (event) => {
         event.preventDefault()
 
-        renderNewToy('http://localhost:3000/toys')
-        // debugger
+        let nameValue = document.querySelector('input[name="name"]')
+        let imageValue = document.querySelector('input[name="image"]')
 
-        event.target.reset()
+        fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accepts': 'application/json'
+          },
+          body: JSON.stringify({
+            name: nameValue.value,
+            image: imageValue.value,
+            likes: 0 // default of 0 likes
+          })
+        })
+        .then( response => response.json() )
+        .then( json => {
+
+          toyCollection.innerHTML += `<div class="card">
+          <h2>${json.name}</h2>
+          <img src=${json.image} class="toy-avatar" />
+          <p data-id="${json.id}">${json.likes} Likes </p>
+          <button class="like-btn">Like <3</button>
+          <button class="delete-btn">Delete</button>
+        </div>`
+        })
+
+      event.target.reset()
+
       })
+
     } else {
       toyForm.style.display = 'none'
     }
   })
 
-  // PATCH method to like a toy
-  function renderLikeToy(url, eventId) {
+// add a like/delete a toy
+toyCollection.addEventListener('click', (event) => {
 
-    fetch(url + '/' + eventId)
+  let toyId = event.target.previousElementSibling // <p> tag
+  let numLikes = parseInt(toyId.innerHTML)
+
+  // like toy
+  if (event.target.className === 'like-btn') {
+    // console.log(event.target)
+    fetch(url + '/' + toyId.dataset.id, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accepts': 'application/json'
+      },
+      body: JSON.stringify({
+        // persists 'like update' to database
+        likes: ++numLikes
+      })
+    })
     .then( response => response.json() )
     .then( json => {
 
+      // frontend update
+      toyId.innerHTML = `${numLikes} Likes`
 
-      fetch(url + '/' + eventId, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify( {
-          likes: json.likes + 1
-        })
-      })
-      .then( (response) => {
-        return response.json()
-      })
-      .then( json => {
-        console.log(json)
-      })
     })
+  }
+
+  // delete toy
+  if (event.target.className === 'delete-btn') {
+
+    // delete from database
+    fetch(url + '/' + toyId.previousElementSibling.dataset.id, {
+      method: 'DELETE'
+    })
+
+    // delete from frontend
+    event.target.parentNode.remove()
 
   }
 
-  // LIKE BUTTON
-  toyContainer.addEventListener('click', (event) => {
-
-    let toyCard = document.getElementsByClassName('card')
-
-    if (event.target.className === 'like-btn') {
-
-      let likecount = event.target.previousElementSibling
-      likecount.innerHTML = `${parseInt(likecount.innerHTML) + 1} Likes`
-
-      renderLikeToy('http://localhost:3000/toys', event.target.id)
-    }
-  })
-
-
-// })
-
-
-// OR HERE!
+})
